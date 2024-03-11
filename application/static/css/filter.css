@@ -1,0 +1,85 @@
+#buttons :hover text {
+    fill: #0f0f0f;
+    transition: .3s ease-out
+}
+
+#buttons text {
+    user-select: none;
+}
+
+/*#bar_chart_bars {*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*#bar_chart_bars :hover{*/
+/*    fill: rgb(255, 168, 154);*/
+/*}*/
+
+/*#bar_chart_bars :hover + #brush_bars{*/
+/*    fill: rgb(255, 168, 154);*/
+/*}*/
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu a::after {
+    transform: rotate(-90deg);
+    position: absolute;
+    right: 6px;
+    top: .8em;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-left: .1rem;
+    margin-right: .1rem;
+}
+
+/*#filter-button-group button{*/
+/*    background-color: #bcd6e9;*/
+/*}*/
+
+#filter-button-group {
+    margin-top: 0.5%;
+}
+
+#filter-loader-container {
+    margin-top: 0.5%
+}
+
+.bar {
+    will-change: height;
+}
+
+#filter-tab-content {
+    height: 100%;
+}
+
+#node-filter-tab {
+    height: 100%;
+}
+
+#node-filter {
+    height: 85%;
+}
+
+form {
+    user-select: none;
+}
+
+.input-field {
+    margin-bottom: 0.618rem;
+}
+
+#log-scale-checkbox {
+    position: unset;
+    margin-left: 0rem;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#filter-select-attribute-button {
+    width: 160px;
+}

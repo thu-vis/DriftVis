@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Concept Drift</title>
+  <link rel="icon" type="image/x-ico" href="../static/favicon.ico">
+  <link type="text/css" rel="stylesheet" href="../static/css/lib/d3.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/lib/loading-icon.css">
+  <!--link type="text/css" rel="stylesheet" href="../static/css/lib/materialize.min.css"-->
+  <link type="text/css" rel="stylesheet" href="../static/css/lib/bootstrap-4.0.0.min.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/lib/bootstrap-select.min.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/lib/bootstrap-toggle.min.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/lib/font-awesome.css">
+  <link href="../static/css/lib/nouislider.css" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="../static/css/instance.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/search.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/concept.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/lasso.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/filter.css">
+  <link type="text/css" rel="stylesheet" href="../static/css/layout.css">
+  <meta charset="UTF-8">
+</head>
+<!-- <body style="overflow:hidden;"> -->
+<script src="../static/js/lib/d3.js"></script>
+<script src="../static/js/lib/d3-contour.min.js"></script>
+<script src="../static/js/lib/d3-interpolate-path.min.js"></script>
+<script src="../static/js/lib/d3-lasso.min.js"></script>
+<script src="../static/js/lib/slider.js"></script>
+<script src="../static/js/lib/common.js"></script>
+<script src="../static/js/lib/request_dag.js"></script>
+<script src="../static/js/lib/jquery-3.2.1.min.js"></script>
+<script src="../static/js/lib/materialize.min.js"></script>
+<script src="../static/js/lib/nouislider.js"></script>
+<script src="../static/js/lib/planck.js"></script>
+<script src="../static/js/lib/popper.min.js"></script>
+<script src="../static/js/lib/bootstrap-4.0.0.min.js"></script>
+<script src="../static/js/lib/bootstrap-select.min.js"></script>
+<script src="../static/js/lib/bootstrap-toggle.min.js"></script>
+<script src="../static/js/lib/dagre.js"></script>
+<script src="../static/js/lib/turf.min.js"></script>
+
+<script src="../static/js/util.js"></script>
+<script src="../static/js/main.js"></script>
+
+<script src="../static/js/dataLoader.js"></script>
+<script src="../static/js/modelLoader.js"></script>
+<script src="../static/js/effect-for-scatterplot.js"></script>
+<script src="../static/js/effect-for-linechart.js"></script>
+<script src="../static/js/action-trail.js"></script>
+<script src="../static/js/brushController.js"></script>
+<script src="../static/js/lib/Box2DWeb-2.1.a.3.js"></script>
+<script src="../static/js/animation-control.js"></script>
+
+<body>
+  <div id="popover_init">
+    <div class="message">
+      <p>
+        In our deployed system, we fix the time points that the expert steps in to analyze the data so that it is consistent with the case in our video. In the real-world scenario, the data will come gradually, and the expert can stop to analyze it at any time.
+      </p>
+      <button type="button" class="btn btn-1" id="popover_init_ok" style="margin-left: 48%">
+        OK
+      </button>
+    </div>
+  </div>
+  <div id="loading">
+    <div class="lds-grid">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <div class="main-container">
+    <div class="self-column" id="plot-column">
+      <div class="self-row" id="dataset-row"
+        style="flex: 1 1 8%;max-height: 100px;  display: flex; flex-direction: row;">
+        <div class="component" style="flex: 0 1 100%; padding-right: 0px; margin-right: 0px;">
+          <div class="view-header">
+            <span class="my-panel-heading">Dataset</span>
+          </div>
+          <div class="self-row" style="flex: 0 1 40px;">
+            <div>
+              <div class="flex-line pl-4">
+                <select class="selectpicker" id="filter-select-dataset" data-width="200px">
+                </select>
+                <button type="button" class="btn btn-1" style="margin-left: 20px" id="next">Next Step</button>
+                <!--button type="button" class="btn btn-1" style="margin-left: 10px;" disabled id="play_or_pause">Pause</button-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="self-row component" id="lineplot-row" style="flex: 1 1 32%;">
+        <div class="view-header">
+          <span class="my-panel-heading">Feature</span>
+        </div>
+
+        <div class="my-flex-row" style="flex:1 0;">
+          <div class="my-flex-column component-part" style="flex: 1 0 65%; padding: 4px 4px 4px 4px; border: none;">
+            <select class="selectpicker" id="filter-select-method" data-width="90px"></select>
+            <!--
+              <div style="margin-left: 8px;">
+                <span class="ma-2 v-chip v-chip--label theme--light v-size--default pink white--text">
+                  <span class="v-chip__content">
+                    Item Numbers:
+                  </span>
+                </span>
+              </div>
+
+              <div id="win-size-slider" style="width: 100%;">
+                <svg width="100" height="30"></svg>
+              </div>
+              -->
+            <div id="lineplot" class="component-part" style="flex: 2 1 200px">
+              <svg></svg>
+            </div>
+
+            <div class="component-part" id="action-trail-plot" style="flex: 0 0 120px;position: relative;display: none">
+              <span class="my-panel-heading" style="position: absolute;">
+                Action Trail
+              </span>
+              <svg></svg>
+            </div>
+
+          </div>
+          <div class="component-part" style="flex: 0 1 25%; padding: 4px 4px 4px 4px; height: 100%;"
+            id="feature-grid-view">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+      <div class="self-row component" style="display:flex; flex:1 1 40%;">
+        <div class="view-header">
+          <span class="my-panel-heading">Streaming Scatterplot</span>
+          <div style="margin-left: auto;">
+            <!--button type="button" class="btn btn-1" id="show_density_diff">Density Diff</button-->
+            <button type="button" class="btn btn-1" id="merge">Merge Component</button>
+          </div>
+        </div>
+        <div class="self-row" id="scatterplot-row" style="flex: 1 0 50%;">
+          <div id="scatterplot">
+            <svg></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="self-column" id="config-and-detail-column">
+      <div class="self-row component" id="model-row" style="flex: 1 0 24%;">
+        <div class="view-header">
+          <span class="my-panel-heading">Base Learner</span>
+          <div style="margin-left: auto;">
+            <button type="button" class="btn btn-1" id="adapt">Adapt</button>
+            <button type="button" class="btn btn-1" id="add-model">Add</button>
+          </div>
+        </div>
+        <div id="model-scroll-div">
+          <table class="table table-hover" id="model-table" style="text-align:center;">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Encoding</th>
+                <th>Number of Samples</th>
+                <th>GMM Components</th>
+                <!--<th>Contribution</th>-->
+                <th>Selection</th>
+              </tr>
+            </thead>
+            <tbody id="model-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="self-row component" id="detail-row" style="flex: 1 0 30%;">
+        <div class="view-header">
+          <span class="my-panel-heading">Samples of Interest</span>
+        </div>
+        <div id="detail-scroll-div">
+          <span id="current_label" style="position: absolute; display: none;"
+            class="ma-2 v-chip v-chip--label theme--light v-size--small pink white--text">
+            <span class="v-chip__content">
+              Current Selection
+            </span>
+          </span>
+          <span id="streaming_label" style="position: absolute; display: none;"
+            class="ma-2 v-chip v-chip--label theme--light v-size--small pink white--text">
+            <span class="v-chip__content">
+              Streaming Data
+            </span>
+          </span>
+          <table class="table table-hover" id="drift-table" style="text-align:center;">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Number of Samples</th>
+                <!--<th>Coverage</th>-->
+                <th>Avg Drift Degree</th>
+                <th>GMM Components</th>
+                <th>Model Distribution</th>
+              </tr>
+            </thead>
+            <tbody id="drift-current">
+            </tbody>
+            <tbody id="drift-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="self-row component" id="performance-view" style="flex: 1 0 34%;">
+        <div class="view-header">
+          <span class="my-panel-heading">Performance</span>
+          <div style="margin-left: auto;">
+            <button type="button" class="btn btn-1" id="show_comparsion" disabled>Show Comparsion</button>
+          </div>
+        </div>
+        <div class="view-desc">
+          <p>Click a sample to show its performance.</p>
+        </div>
+        <div class="view-body">
+        </div>
+      </div>
+    </div>
+</body>
+<svg width=0 height=0>
+  <defs>
+    <pattern id="pattern0" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" style="stroke: none; fill: #444444" />
+    </pattern>
+    <pattern id="pattern1" x="2" y="2" width="4" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="2" x2="4" y2="2" style="stroke:#444444;stroke-width:1" />
+    </pattern>
+    <pattern id="pattern3" x="2" y="2" width="4" height="4" patternUnits="userSpaceOnUse">
+      <line x1="2" y1="0" x2="2" y2="4" style="stroke:#444444;stroke-width:1" />
+    </pattern>
+    <pattern id="pattern2" x="2" y="2" width="4" height="4" patternUnits="userSpaceOnUse">
+      <line x1="4" y1="0" x2="0" y2="4" style="stroke:#444444;stroke-width:1" />
+    </pattern>
+    <pattern id="pattern4" x="2" y="2" width="4" height="4" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="4" y2="4" style="stroke:#444444;stroke-width:1" />
+    </pattern>
+    <pattern id="pattern5" x="2" y="2" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="2" style="stroke: none; fill: #444444" />
+      <circle cx="6" cy="6" r="2" style="stroke: none; fill: #444444" />
+    </pattern>
+    <pattern id="pattern6" x="0.5" y="0.5" width="6" height="6" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="3" x2="6" y2="3" style="stroke:#444444;stroke-width:2" />
+    </pattern>
+    <pattern id="pattern7" x="1.5" y="1.5" width="6" height="6" patternUnits="userSpaceOnUse">
+      <line x1="3" y1="0" x2="3" y2="6" style="stroke:#444444;stroke-width:2" />
+    </pattern>
+    <pattern id="pattern8" x="2" y="2" width="8" height="8" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="8" x2="8" y2="0" style="stroke:#444444;stroke-width:2" />
+    </pattern>
+    <pattern id="pattern9" x="2" y="2" width="8" height="8" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="8" y2="8" style="stroke:#444444;stroke-width:2" />
+    </pattern>
+     <pattern id="pattern10" x="2" y="2" width="8" height="8" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="8" y2="8" style="stroke:#444444;stroke-width:2" />
+      <line x1="0" y1="8" x2="8" y2="0" style="stroke:#444444;stroke-width:2" />
+    </pattern>
+    <pattern id="pattern11" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+      <line x1="3" y1="0" x2="3" y2="6" style="stroke:#444444;stroke-width:2" />
+      <line x1="0" y1="3" x2="6" y2="3" style="stroke:#444444;stroke-width:2" />
+    </pattern>
+  </defs>
+  <!--
+    <rect width='25' height='25' fill='url(#pattern0)' x='0'></rect>
+    <rect width='25' height='25' fill='url(#pattern1)' x='25'></rect>
+    <rect width='25' height='25' fill='url(#pattern2)' x='50'></rect>
+    <rect width='25' height='25' fill='url(#pattern3)' x='75'></rect>
+    <rect width='25' height='25' fill='url(#pattern4)' x='100'></rect>
+    <rect width='25' height='25' fill='url(#pattern5)' x='125'></rect>
+    <rect width='25' height='25' fill='url(#pattern6)' x='150'></rect>
+    <rect width='25' height='25' fill='url(#pattern7)' x='175'></rect>
+    <rect width='25' height='25' fill='url(#pattern8)' x='200'></rect>
+    <rect width='25' height='25' fill='url(#pattern9)' x='225'></rect>
+    -->
+</svg>
+
+</html>

@@ -1,0 +1,30 @@
+.customized-input-field {
+    margin-top: 0;
+!important;
+    margin-bottom: 0;
+!important;
+}
+
+.customized-row {
+    margin-bottom: 0;
+!important;
+    /*height: 55%;*/
+}
+
+.customized-search-button {
+    margin-top: 0.90rem;
+!important;
+    margin-bottom: 0;
+!important;
+}
+
+.customized-preloader {
+    margin-top: 0.90rem;
+!important;
+    margin-bottom: 0;
+!important;
+}
+
+/*#search-button{*/
+/*    background-color: #bcd6e9;*/
+/*}*/

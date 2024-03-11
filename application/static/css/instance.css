@@ -1,0 +1,75 @@
+#tab-container {
+    height: 250px;
+}
+
+/*#graph-container {
+    height: 600px;
+}*/
+
+#detail-infomation-panel {
+    height: 250px;
+}
+
+.form-control.form-year-input {
+    display: inline;
+    width: 60px;
+}
+
+.help-block.help-block-tight {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.node {
+    fill: #666;
+}
+
+.node.selected > .circle {
+    fill: #ffb732;
+
+}
+
+.node > .user-icon > * {
+    fill: steelblue;
+}
+
+.node.selected > .user-icon > * {
+    fill: #ffb732;
+    fill: green;
+
+}
+
+.node > .node-label {
+    cursor: default;
+    font: 10px sans-serif;
+    /*pointer-events: none;*/
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+.nodeOmitLink {
+    fill: none;
+}
+
+.link.highlight, .nodeOmitLink.highlight {
+    stroke: #777;
+}
+
+
+.link.selected, .nodeOmitLink.selected {
+    /*stroke: orange;*/
+    /*fill: orange;*/
+}
+
+.link.link-hidden {
+    /*visibility: hidden;*/
+    opacity: 0.2;
+}
+
+#node-link-container > g {
+    width: 100%;
+    height: 100%;
+}
+
+#graph-search {
+    width: 250px;
+}
